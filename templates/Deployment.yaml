@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jellyfin
+  labels:
+    app: jellyfin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jellyfin
+  template:
+    metadata:
+      name: jellyfin
+      labels:
+        app: jellyfin
+    spec:
+      automountServiceAccountToken: false
+      securityContext:
+        supplementalGroups:
+          - 44
+          - 109
+        fsGroup: 1000
+      volumes:
+        - name: jellyfin-config
+          persistentVolumeClaim:
+            claimName: {{.Chart.Name}}-jellyfin-config
+        - name: cache
+          {{- .Values.storage.cache.volumeObject | toYaml | nindent 10}}
+        - name: data
+          {{- .Values.storage.media.volumeObject | toYaml | nindent 10}}
+      restartPolicy: Always
+      containers:
+        - name: jellyfin
+          image: {{.Values.config.jellyfin.image}}:{{.Values.config.jellyfin.tag}}
+          ports:
+            - containerPort: 8096
+              protocol: TCP
+          resources:
+            {{- .Values.config.jellyfin.resourcesObject | toYaml | nindent 12}}
+          volumeMounts:
+            - mountPath: /data/movies
+              subPath: {{.Values.storage.media.moviesPath}}
+              name: data
+            - mountPath: /data/tvshows
+              subPath: {{.Values.storage.media.tvPath}}
+              name: data
+            - mountPath: /config
+              name: jellyfin-config
+            - mountPath: /cache
+              name: cache

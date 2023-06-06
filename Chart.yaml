@@ -1,0 +1,5 @@
+apiVersion: v2
+name: helm-jellyfin
+description: Helm chart to deploy jellyfin
+type: application
+version: 1.0.0

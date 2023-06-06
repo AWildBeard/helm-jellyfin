@@ -1,0 +1,30 @@
+storage:
+  config:
+    storageClass: ""
+    size: 10Gi
+    accessModes:
+      - ReadWriteOnce
+  media:
+    volumeObject:
+      persistentVolumeClaim:
+        claimName: download-kit-data
+    tvPath: ./media/tv
+    moviesPath: ./media/movies
+  cache:
+    volumeObject:
+      emptyDir:
+        medium: Memory
+        sizeLimit: 12Gi
+
+config:
+  jellyfin:
+    image: jellyfin/jellyfin
+    tag: 10.8.10
+    resourcesObject:
+      limits:
+        gpu.intel.com/i915: 1
+
+service:
+  name: jellyfin
+  type: NodePort
+  port: 8096
