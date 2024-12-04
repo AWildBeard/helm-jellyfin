@@ -27,4 +27,5 @@ config:
 service:
   name: jellyfin
   type: NodePort
+  loadBalancerClass: ""
   port: 8096
