@@ -10,6 +10,7 @@ storage:
         claimName: download-kit-data
     tvPath: ./media/tv
     moviesPath: ./media/movies
+    animePath: ./media/anime
   cache:
     volumeObject:
       emptyDir:

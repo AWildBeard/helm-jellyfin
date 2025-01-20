@@ -17,6 +17,9 @@ spec:
     spec:
       automountServiceAccountToken: false
       securityContext:
+        capabilities:
+          drop:
+            - ALL
         supplementalGroups:
           - 44
           - 109
@@ -44,6 +47,9 @@ spec:
               name: data
             - mountPath: /data/tvshows
               subPath: {{.Values.storage.media.tvPath}}
+              name: data
+            - mountPath: /data/anime
+              subPath: {{.Values.storage.media.animePath}}
               name: data
             - mountPath: /config
               name: jellyfin-config
